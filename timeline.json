@@ -1,0 +1,32 @@
+{
+  "updated": "[placeholder: YYYY-MM-DD]",
+  "events": [
+    {
+      "key": "event-1",
+      "date": "[placeholder: YYYY-MM-DD]",
+      "title": "[placeholder: event title]",
+      "summary": "[placeholder: one-line summary]",
+      "sources": [
+        { "title": "[placeholder: source title]", "url": "[placeholder: source URL]" }
+      ]
+    },
+    {
+      "key": "event-2",
+      "date": "[placeholder: YYYY-MM-DD]",
+      "title": "[placeholder: event title]",
+      "summary": "[placeholder: one-line summary]",
+      "sources": [
+        { "title": "[placeholder: source title]", "url": "[placeholder: source URL]" }
+      ]
+    },
+    {
+      "key": "event-3",
+      "date": "[placeholder: YYYY-MM-DD]",
+      "title": "[placeholder: event title]",
+      "summary": "[placeholder: one-line summary]",
+      "sources": [
+        { "title": "[placeholder: source title]", "url": "[placeholder: source URL]" }
+      ]
+    }
+  ]
+}

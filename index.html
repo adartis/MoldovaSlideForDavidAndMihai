@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Moldova in the news</title>
+<style>
+/* Brand colours. Fonts: standard for now (Georgia titles, Arial text). */
+:root {
+  --navy: #14213D; --blue: #1E3A6E; --ochre: #C98A2B; --mist: #EEF2F7; --ink: #1E293B;
+  --slate: #5B6578; --sky: #A9BCDD; --rule: #C9D1DD; --ph: #FDF1DC;
+  --serif: "PP Editorial", Georgia, serif;
+  --sans: "Aeonik", Arial, "Helvetica Neue", sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body { background: #D5DBE4; overflow: hidden; font-family: var(--sans); color: var(--ink); display: grid; place-items: center; }
+@media (prefers-color-scheme: dark) { body { background: #070C18; } }
+
+/* A fixed 1280 x 720 slide, scaled to fit the window */
+.frame { position: relative; box-shadow: 0 6px 30px rgba(10, 20, 40, .25); }
+.slide { position: absolute; top: 0; left: 0; width: 1280px; height: 720px; transform-origin: 0 0; overflow: hidden; background: #fff; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--ochre); outline-offset: 2px; }
+a { color: var(--blue); text-underline-offset: 3px; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 700; margin: 0; }
+.label { font: 700 12px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--blue); }
+.label::before { content: ""; display: inline-block; width: 18px; height: 3px; background: var(--ochre); vertical-align: middle; margin: -2px 10px 0 0; }
+.ph { background: var(--ph); outline: 1px dashed var(--ochre); padding: 0 4px; }      /* text still to be supplied */
+.unavail { font: 600 16px/1.5 var(--sans); color: var(--slate); border: 1px dashed var(--rule); border-radius: 4px; padding: 14px 18px; background: #fff; }
+
+/* Header band */
+.head { position: absolute; left: 0; right: 0; top: 0; height: 150px; background: var(--navy); color: #fff; }
+.head img { position: absolute; left: 64px; top: 47px; width: 56px; height: 56px; }
+.head .eyebrow { position: absolute; left: 144px; top: 44px; font: 700 13px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--ochre); }
+.head h1 { position: absolute; left: 144px; top: 66px; font-size: 48px; line-height: 1.1; }
+.head .updated { position: absolute; right: 64px; top: 92px; font-size: 16px; color: var(--sky); }
+.head .updated b { color: #fff; }
+
+/* Timeline (from timeline.json) */
+.tl-label { position: absolute; left: 64px; top: 182px; }
+.tl-key { position: absolute; right: 64px; top: 180px; font-size: 13px; color: var(--slate); }
+.tl-key i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--blue); vertical-align: -1px; margin: 0 6px 0 14px; }
+.tl-key i.past { background: var(--blue); }
+.tl { position: absolute; left: 64px; right: 64px; top: 204px; height: 126px; }
+.tl::before { content: ""; position: absolute; left: 0; right: 0; top: 52px; height: 2px; background: #B9C3D3; }
+.tl.failed::before { display: none; }
+.tl-list { position: relative; display: flex; height: 100%; }
+.tl-ev { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; background: none; border: 0; padding: 6px 6px 4px; cursor: pointer; border-radius: 6px; font-family: var(--sans); color: var(--ink); }
+.tl-date { height: 34px; display: flex; align-items: flex-end; font: 700 13px/1.2 var(--sans); color: var(--blue); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.tl-dot { width: 18px; height: 18px; margin: 4px 0 10px; border-radius: 50%; background: var(--blue); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--blue); flex: none; transition: transform .15s; }
+.tl-ev.upcoming .tl-dot { background: #fff; }
+.tl-title { font: 14px/1.3 var(--sans); max-width: 100%; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tl-list.many .tl-title { display: none; }
+.tl-ev:hover .tl-title { text-decoration: underline; }
+.tl-ev[aria-selected="true"] .tl-dot { background: var(--ochre); box-shadow: 0 0 0 2px var(--ochre); transform: scale(1.3); }
+.tl-ev[aria-selected="true"] .tl-title { font-weight: 700; color: var(--navy); }
+@media (prefers-reduced-motion: reduce) { .tl-dot { transition: none; } }
+
+/* Lower half: selected event (left), positions (right) */
+.cols { position: absolute; left: 64px; right: 64px; top: 350px; bottom: 62px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.col { position: relative; display: flex; flex-direction: column; min-height: 0; }
+.detail { flex: 1; min-height: 0; background: var(--mist); border-left: 4px solid var(--ochre); border-radius: 4px; padding: 20px 26px; display: flex; flex-direction: column; }
+.detail .when { font: 700 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--blue); flex: none; }
+.detail h3 { font-size: 24px; line-height: 1.2; color: var(--navy); margin: 8px 0; flex: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fit { flex: 1; min-height: 0; overflow: hidden; }
+.fit.clipped { -webkit-mask-image: linear-gradient(#000 82%, transparent); mask-image: linear-gradient(#000 82%, transparent); }  /* still too long: fade the end */
+.detail .fit { font-size: 16px; }
+.detail p { margin: 0 0 10px; line-height: 1.5; }
+.srcs { margin: 0; padding: 0; list-style: none; font-size: .85em; line-height: 1.5; color: var(--slate); }
+.srcs li::before { content: "Source: "; }
+
+/* Positions (from positions.csv) */
+.tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--rule); flex: none; margin-top: -4px; }
+.tab { font: 700 16px/1 var(--sans); color: var(--slate); background: none; border: 0; border-bottom: 4px solid transparent; margin-bottom: -2px; padding: 10px 18px 11px; cursor: pointer; border-radius: 4px 4px 0 0; }
+.tab:hover { color: var(--navy); background: var(--mist); }
+.tab[aria-selected="true"] { color: var(--navy); border-bottom-color: var(--ochre); }
+.pos { flex: 1; min-height: 0; background: var(--mist); border-radius: 0 0 4px 4px; padding: 20px 26px 16px; display: flex; flex-direction: column; }
+.pos .fit { font: 24px/1.38 var(--serif); color: var(--navy); }
+.pos .fit p { margin: 0; }
+.pos .src { flex: none; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--slate); }
+
+.foot { position: absolute; left: 64px; right: 64px; bottom: 24px; font-size: 12px; color: var(--slate); }
+.foot code { font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <main class="slide" id="slide">
+
+    <header class="head">
+      <img src="img/logo.png" alt="[placeholder: organisation name]">
+      <div class="eyebrow">Team Europe briefing</div>
+      <h1>Moldova in the news</h1>
+      <div class="updated">Last updated <b class="upd">…</b></div>
+    </header>
+
+    <!-- Timeline: drawn from data/timeline.json, sorted by date -->
+    <h2 class="label tl-label">Key dates</h2>
+    <div class="tl-key data" id="tl-key" hidden><i class="past"></i>Past<i></i>Upcoming</div>
+    <div class="tl data" id="tl">
+      <div class="tl-list" id="tl-list" role="tablist" aria-label="Key dates"></div>
+    </div>
+
+    <div class="cols">
+      <!-- Selected event -->
+      <section class="col data" id="tl-col">
+        <div class="detail" id="tl-detail" role="tabpanel">
+          <div class="when" id="tl-d-date"></div>
+          <h3 id="tl-d-title"></h3>
+          <div class="fit" id="tl-d-body"></div>
+        </div>
+      </section>
+
+      <!-- Positions: one tab per actor, rows found by key in data/positions.csv -->
+      <section class="col" id="pos-col">
+        <div class="tabs data" role="tablist" aria-label="Positions">
+          <button class="tab" role="tab" id="tab-eu" data-key="eu" aria-controls="pos">EU</button>
+          <button class="tab" role="tab" id="tab-hu" data-key="hu" aria-controls="pos">HU</button>
+          <button class="tab" role="tab" id="tab-md" data-key="md" aria-controls="pos">MD</button>
+        </div>
+        <div class="pos data" id="pos" role="tabpanel">
+          <div class="fit" id="pos-text"></div>
+          <div class="src" id="pos-src"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="foot">Content from <code>data/timeline.json</code> and <code>data/positions.csv</code> · Last updated <span class="upd">…</span></div>
+  </main>
+</div>
+
+<script>
+/* ---------- Scale the 1280 x 720 slide to fit the window ---------- */
+var frame = document.getElementById('frame'), slide = document.getElementById('slide');
+function fit() {
+  var s = Math.min((innerWidth - 24) / 1280, (innerHeight - 24) / 720);
+  frame.style.width = 1280 * s + 'px';
+  frame.style.height = 720 * s + 'px';
+  slide.style.transform = 'scale(' + s + ')';
+}
+addEventListener('resize', fit);
+fit();
+
+
+/* =====================================================================
+   LOADING THE DATA
+   Everything that changes lives in two files in the data/ folder.
+   ===================================================================== */
+
+// Read one file. Gives back its contents, or null if it can't be loaded.
+function load(path, kind) {
+  return fetch(path, { cache: 'no-cache' })                 // always ask for the latest copy
+    .then(function (r) {
+      if (!r.ok) throw new Error(path);                     // file missing
+      return kind === 'json' ? r.json() : r.text();         // a broken JSON file also counts as failed
+    })
+    .catch(function () { return null; });                   // any problem: null, handled below
+}
+
+// Turn CSV text into rows like { key: 'hu', actor: 'Hungary', position: '…', … }.
+// Commas inside "quoted values" are kept; "" inside quotes is one quote mark.
+function parseCsv(text) {
+  text = text.replace(/^﻿/, '');                       // drop Excel's hidden start marker
+  var rows = [], row = [], cell = '', quoted = false;
+  for (var i = 0; i < text.length; i++) {
+    var c = text[i];
+    if (quoted) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') quoted = false;
+      else cell += c;
+    }
+    else if (c === '"') quoted = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+    else if (c !== '\r') cell += c;
+  }
+  row.push(cell); rows.push(row);
+  var head = rows.shift().map(function (h) { return h.trim().toLowerCase(); });  // column names
+  return rows
+    .filter(function (r) { return r.join('').trim() !== ''; })                     // skip empty lines
+    .map(function (r) {
+      var o = {};
+      head.forEach(function (h, j) { o[h] = (r[j] || '').trim(); });
+      return o;
+    });
+}
+
+// Load both files at the same time, then fill the slide.
+Promise.all([load('data/positions.csv', 'text'), load('data/timeline.json', 'json')])
+  .then(function (files) {
+    var positions = files[0] === null ? null : parseCsv(files[0]);   // null = file failed
+    var timeline = files[1];                                         // null = file failed
+    var updated = (timeline && timeline.updated) ? formatDate(timeline.updated) : 'unavailable';
+    var events = (timeline && Array.isArray(timeline.events)) ? timeline.events : null;
+
+    // Each part is filled separately, so a problem in one never blanks the other.
+    showUpdated(updated);
+    safely(function () { showTimeline(events, updated); }, ['#tl-key', '#tl-list', '#tl-detail'], ['#tl', '#tl-col'], updated);
+    safely(function () { showPositions(positions, updated); }, ['#pos-col .tabs', '#pos'], ['#pos-col'], updated);
+  });
+
+
+/* =====================================================================
+   DRAWING THE DATA ON THE SLIDE
+   ===================================================================== */
+
+var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function isDate(s) {                                        // a real YYYY-MM-DD date?
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || '').trim());
+  return !!m && +m[2] >= 1 && +m[2] <= 12 && +m[3] >= 1 && +m[3] <= 31;
+}
+function formatDate(s) {                                    // 2026-10-16 -> "16 Oct 2026"; anything else as written
+  s = String(s || '').trim();
+  return isDate(s) ? (+s.slice(8, 10)) + ' ' + MONTHS[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4) : s;
+}
+function todayIso() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+// "Data unavailable · Last updated 16 Oct 2026" (just "Data unavailable" if the date is unknown too)
+function unavailableText(updated) {
+  return updated === 'unavailable' ? 'Data unavailable' : 'Data unavailable · Last updated ' + updated;
+}
+function unavailable(updated) {
+  var d = document.createElement('div'); d.className = 'unavail'; d.textContent = unavailableText(updated); return d;
+}
+
+// Run one step; if it fails, hide its parts and show "Data unavailable" in their place.
+function safely(step, partsToHide, showIn, updated) {
+  try { step(); }
+  catch (err) {
+    partsToHide.forEach(function (sel) { document.querySelector(sel).hidden = true; });
+    showIn.forEach(function (sel) {
+      var box = document.querySelector(sel);
+      box.classList.add('failed');
+      box.appendChild(unavailable(updated));
+    });
+  }
+}
+
+function markPlaceholder(el) {                             // highlight values still marked [placeholder
+  if (/^\[placeholder/i.test(el.textContent)) el.classList.add('ph');
+  return el;
+}
+
+// A link if the address starts with http(s)://, otherwise plain text.
+function linkOrText(title, url) {
+  url = String(url || '').trim();
+  var ok = /^https?:\/\/\S+$/i.test(url);
+  var el = document.createElement(ok ? 'a' : 'span');
+  el.textContent = String(title || '').trim() || url || 'Untitled source';
+  if (ok) { el.href = url; el.target = '_blank'; el.rel = 'noopener'; }
+  return markPlaceholder(el);
+}
+
+// Shrink text one pixel at a time until it fits its box.
+function fitText(el, maxPx, minPx) {
+  var size = maxPx;
+  el.style.fontSize = size + 'px';
+  while (size > minPx && el.scrollHeight > el.clientHeight + 1) { size -= 1; el.style.fontSize = size + 'px'; }
+  el.classList.toggle('clipped', el.scrollHeight > el.clientHeight + 1);
+}
+
+// Tabs you can click, or move between with the arrow keys.
+function makeTabs(tabs, onSelect) {
+  function select(i, focus) {
+    tabs.forEach(function (t, j) { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
+    if (focus) tabs[i].focus();
+    onSelect(i);
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i, false); });
+    t.addEventListener('keydown', function (e) {
+      var n = tabs.length, k = e.key, j = null;
+      if (k === 'ArrowRight' || k === 'ArrowDown') j = (i + 1) % n;
+      else if (k === 'ArrowLeft' || k === 'ArrowUp') j = (i - 1 + n) % n;
+      else if (k === 'Home') j = 0;
+      else if (k === 'End') j = n - 1;
+      if (j !== null) { e.preventDefault(); select(j, true); }
+    });
+  });
+  select(0, false);
+}
+
+/* Header and footer: the "updated" date from timeline.json */
+function showUpdated(updated) {
+  document.querySelectorAll('.upd').forEach(function (el) { el.textContent = updated; });
+}
+
+/* Timeline: clickable, sorted by date; the selected event shows below */
+function showTimeline(events, updated) {
+  if (!events) throw new Error('timeline.json did not load');
+  // keep events with a date and a title; real dates first in date order, anything else after them
+  var list = events.filter(function (e) { return e && String(e.date || '').trim() && String(e.title || '').trim(); });
+  list.sort(function (a, b) {
+    var da = isDate(a.date), db = isDate(b.date);
+    if (da && db) return String(a.date).trim().localeCompare(String(b.date).trim());
+    return da ? -1 : db ? 1 : 0;
+  });
+  if (!list.length) throw new Error('no events');
+
+  var box = document.getElementById('tl-list'), today = todayIso(), anyUpcoming = false;
+  var tabs = list.map(function (ev, i) {
+    var b = document.createElement('button');
+    b.className = 'tl-ev'; b.type = 'button'; b.id = 'tl-ev-' + i;
+    b.setAttribute('role', 'tab'); b.setAttribute('aria-controls', 'tl-detail');
+    if (isDate(ev.date) && String(ev.date).trim() > today) { b.classList.add('upcoming'); anyUpcoming = true; }
+    b.innerHTML = '<span class="tl-date"></span><span class="tl-dot" aria-hidden="true"></span><span class="tl-title"></span>';
+    b.children[0].textContent = formatDate(ev.date);
+    b.children[2].textContent = String(ev.title).trim();
+    box.appendChild(b);
+    return b;
+  });
+  if (list.length > 10) box.classList.add('many');          // many events: dates only on the line
+  document.getElementById('tl-key').hidden = !anyUpcoming;
+
+  makeTabs(tabs, function (i) {
+    var ev = list[i];
+    document.getElementById('tl-detail').setAttribute('aria-labelledby', tabs[i].id);
+    document.getElementById('tl-d-date').textContent = formatDate(ev.date);
+    var h = document.getElementById('tl-d-title');
+    h.className = ''; h.title = String(ev.title).trim(); h.textContent = String(ev.title).trim(); markPlaceholder(h);
+    var body = document.getElementById('tl-d-body');
+    body.textContent = '';
+    var p = document.createElement('p');
+    p.textContent = String(ev.summary || '').trim() || unavailableText(updated);
+    body.appendChild(markPlaceholder(p));
+    var ul = document.createElement('ul'); ul.className = 'srcs';
+    (Array.isArray(ev.sources) ? ev.sources : []).forEach(function (s) {
+      if (!s || !(s.title || s.url)) return;
+      var li = document.createElement('li'); li.appendChild(linkOrText(s.title, s.url)); ul.appendChild(li);
+    });
+    if (ul.firstChild) body.appendChild(ul);
+    fitText(body, 16, 11);
+  });
+}
+
+/* Positions: one tab per actor, each row found by its key (never by row order) */
+function showPositions(rows, updated) {
+  if (!rows) throw new Error('positions.csv did not load');
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('#pos-col .tab'));
+  var text = document.getElementById('pos-text'), src = document.getElementById('pos-src');
+  function find(key) {
+    for (var i = 0; i < rows.length; i++) if ((rows[i].key || '').toLowerCase() === key) return rows[i];
+    return null;
+  }
+  tabs.forEach(function (t) {
+    var row = find(t.dataset.key);
+    t.textContent = (row && row.actor) || t.dataset.key.toUpperCase();   // missing row: the key in capitals
+  });
+  makeTabs(tabs, function (i) {
+    var row = find(tabs[i].dataset.key);
+    document.getElementById('pos').setAttribute('aria-labelledby', tabs[i].id);
+    text.textContent = ''; src.textContent = '';
+    if (!row || !row.position) {
+      text.style.fontSize = '';
+      text.appendChild(unavailable(updated));
+    } else {
+      var p = document.createElement('p'); p.textContent = row.position;
+      text.appendChild(markPlaceholder(p));
+      fitText(text, 24, 13);
+    }
+    if (row && (row.source_title || row.source_url)) {
+      src.appendChild(document.createTextNode('Source: '));
+      src.appendChild(linkOrText(row.source_title, row.source_url));
+    }
+    src.hidden = !src.firstChild;
+  });
+}
+</script>
+</body>
+</html>
