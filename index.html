@@ -127,7 +127,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 700; margin: 0; }
       </section>
     </div>
 
-    <div class="foot">Content from <code>data/timeline.json</code> and <code>data/positions.csv</code> · Last updated <span class="upd">…</span></div>
+    <div class="foot">Content from <code>data/timeline.json</code> and <code>positions.csv</code> · Last updated <span class="upd">…</span></div>
   </main>
 </div>
 
@@ -188,7 +188,7 @@ function parseCsv(text) {
 }
 
 // Load both files at the same time, then fill the slide.
-Promise.all([load('data/positions.csv', 'text'), load('data/timeline.json', 'json')])
+Promise.all([load('positions.csv', 'text'), load('data/timeline.json', 'json')])
   .then(function (files) {
     var positions = files[0] === null ? null : parseCsv(files[0]);   // null = file failed
     var timeline = files[1];                                         // null = file failed
